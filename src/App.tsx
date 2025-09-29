@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
-import { Printer, Eye, EyeOff, FileText } from 'lucide-react';
-import { InvoiceForm } from './components/InvoiceForm';
-import { InvoicePreview } from './components/InvoicePreview';
-import { InvoicePrint } from './components/InvoicePrint';
-import { Invoice, CompanyInfo } from './types/invoice';
-import { useLocalStorage } from './hooks/useLocalStorage';
+import React, { useState } from "react";
+import { Printer, Eye, EyeOff, FileText } from "lucide-react";
+import { InvoiceForm } from "./components/InvoiceForm";
+import { InvoicePreview } from "./components/InvoicePreview";
+import { InvoicePrint } from "./components/InvoicePrint";
+import { Invoice, CompanyInfo } from "./types/invoice";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 function App() {
   const [showPreview, setShowPreview] = useState(true);
-  
-  const [invoice, setInvoice] = useLocalStorage<Invoice>('invoice', {
-    number: 'BLH' + Date.now().toString().slice(-6),
-    date: new Date().toISOString().split('T')[0],
-    reference: 'Bon de livraison',
-    vendor: '',
+
+  const [invoice, setInvoice] = useLocalStorage<Invoice>("invoice", {
+    number: "BLH" + Date.now().toString().slice(-6),
+    date: new Date().toISOString().split("T")[0],
+    reference: "Bon de livraison",
+    vendor: "",
+    chantier: "",
+    mode: "",
     client: {
-      code: '',
-      name: '',
+      code: "",
+      name: "",
     },
     items: [],
     subtotal: 0,
@@ -25,14 +27,17 @@ function App() {
     totalQuantity: 0,
   });
 
-  const [companyInfo, setCompanyInfo] = useLocalStorage<CompanyInfo>('companyInfo', {
-    name: '',
-    address: '',
-    phone: '',
-    fax: '',
-    ice: '',
-    rc: '',
-  });
+  const [companyInfo, setCompanyInfo] = useLocalStorage<CompanyInfo>(
+    "companyInfo",
+    {
+      name: "Nour Eddine Houmame",
+      address: "LOT 970 ROUTE DE SAFI | LOTISSEMENT AL MASSAR",
+      phone: "06 17 82 43 83, 06 17 82 43 83 / 06 17 82 43 83",
+      fax: "06 17 82 43 83",
+      ice: "ICE : 00255338543038",
+      rc: "R.C 43245533 - I.F 50665441",
+    }
+  );
 
   const handlePrint = () => {
     window.print();
@@ -46,15 +51,21 @@ function App() {
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center space-x-3">
               <FileText className="w-8 h-8 text-blue-600" />
-              <h1 className="text-3xl font-bold text-gray-800">Générateur de Factures Pro</h1>
+              <h1 className="text-3xl font-bold text-gray-800">
+                Générateur de Factures Pro
+              </h1>
             </div>
             <div className="flex space-x-4">
               <button
                 onClick={() => setShowPreview(!showPreview)}
                 className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
               >
-                {showPreview ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-                {showPreview ? 'Masquer' : 'Aperçu'}
+                {showPreview ? (
+                  <EyeOff className="w-4 h-4 mr-2" />
+                ) : (
+                  <Eye className="w-4 h-4 mr-2" />
+                )}
+                {showPreview ? "Masquer" : "Aperçu"}
               </button>
               <button
                 onClick={handlePrint}
@@ -81,11 +92,19 @@ function App() {
             {showPreview && (
               <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="p-6 border-b border-gray-200">
-                  <h2 className="text-xl font-semibold text-gray-800">Aperçu du Document</h2>
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    Aperçu du Document
+                  </h2>
                 </div>
                 <div className="p-6 bg-gray-50">
-                  <div className="transform scale-75 origin-top-left" style={{ width: '133%', height: '133%' }}>
-                    <InvoicePreview invoice={invoice} companyInfo={companyInfo} />
+                  <div
+                    className="transform scale-75 origin-top-left"
+                    style={{ width: "133%", height: "133%" }}
+                  >
+                    <InvoicePreview
+                      invoice={invoice}
+                      companyInfo={companyInfo}
+                    />
                   </div>
                 </div>
               </div>

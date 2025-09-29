@@ -28,6 +28,8 @@ export interface Invoice {
   date: string;
   reference: string;
   vendor: string;
+  chantier: string;
+  mode: string;
   client: ClientInfo;
   items: InvoiceItem[];
   subtotal: number;
